@@ -56,10 +56,33 @@ require("lazy").setup({
       require('neoscroll').setup({})
     end
   },
- { 'echasnovski/mini.map', version = false },
+  {'petertriho/nvim-scrollbar'},
+  {'norcalli/nvim-colorizer.lua'},
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+    end,
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    }
+  },
+  {'lewis6991/gitsigns.nvim'},
+    {'akinsho/toggleterm.nvim', version = "*", config = true}
+
 })
 
-require('mini.map').setup()
+require("scrollbar").setup()
+require('colorizer').setup()
+require('gitsigns').setup()
+require("toggleterm").setup({
+  open_mapping = [[<c-J>]],
+  direction = 'float'
+})
 
 
 
