@@ -26,6 +26,7 @@ require("lazy").setup({
       dependencies = { 'nvim-lua/plenary.nvim' }
     },
     {'folke/tokyonight.nvim' },
+    {'j-hui/fidget.nvim', opts = {}},
   {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
   {'williamboman/mason.nvim'},
   {'williamboman/mason-lspconfig.nvim'},
@@ -34,12 +35,44 @@ require("lazy").setup({
   {'hrsh7th/cmp-nvim-lsp'},
   {'nvim-treesitter/nvim-treesitter'},
   {'L3MON4D3/LuaSnip'},
-  { "rose-pine/neovim", name = "rose-pine" }
+  { "rose-pine/neovim", name = "rose-pine" },
+  {  "nvim-tree/nvim-tree.lua",
+  version = "*",
+  lazy = false,
+  dependencies = {
+    "nvim-tree/nvim-web-devicons",
+  },
+  config = function()
+    require("nvim-tree").setup {}
+  end}
 })
 
 -- Set colorscheme
 vim.opt.termguicolors = true
 -- vim.cmd.colorscheme('tokyonight')
+
+-- disable netrw at the very start of your init.lua
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
+
+-- empty setup using defaults
+require("nvim-tree").setup()
+
+-- OR setup with some options
+require("nvim-tree").setup({
+  sort = {
+    sorter = "case_sensitive",
+  },
+  view = {
+    width = 30,
+  },
+  renderer = {
+    group_empty = true,
+  },
+  filters = {
+    dotfiles = true,
+  },
+})
 
 require("rose-pine").setup({
     variant = "auto", -- auto, main, moon, or dawn
