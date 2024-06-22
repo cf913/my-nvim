@@ -1,5 +1,8 @@
 require("cf913")
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -22,7 +25,17 @@ require("lazy").setup({
   { 'nvim-telescope/telescope.nvim', tag = '0.1.6',
     dependencies = { 'nvim-lua/plenary.nvim' }
   },
-  { 'folke/tokyonight.nvim' },
+  { 'folke/tokyonight.nvim', 
+ lazy = false,
+  priority = 1000,
+  opts = {
+    transparent = true,
+    styles = {
+      sidebars = "transparent",
+      floats = "transparent",
+    }
+  },
+},
   { 'j-hui/fidget.nvim', opts = {}},
   { 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
   { 'williamboman/mason.nvim'},
@@ -33,16 +46,16 @@ require("lazy").setup({
   { 'nvim-treesitter/nvim-treesitter'},
   { 'L3MON4D3/LuaSnip'},
   { "rose-pine/neovim", name = "rose-pine" },
-  -- { "nvim-tree/nvim-tree.lua",
-  --   version = "*",
-  --   lazy = false,
-  --   dependencies = {
-  --     "nvim-tree/nvim-web-devicons",
-  --   },
-  --   config = function()
-  --     require("nvim-tree").setup {}
-  --   end
-  -- },
+  { "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("nvim-tree").setup {}
+    end
+  },
   {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
@@ -72,11 +85,38 @@ require("lazy").setup({
     }
   },
   {'lewis6991/gitsigns.nvim'},
-    {'akinsho/toggleterm.nvim', version = "*", config = true}
-
+  {'akinsho/toggleterm.nvim', version = "*", config = true},
+  {
+    'numToStr/Comment.nvim',
+    opts = {
+        -- add any options here
+    }
+  },
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
+  }
 })
 
-require("scrollbar").setup()
+vim.cmd[[colorscheme tokyonight]]
+
+require('lualine').setup()
+require('Comment').setup()
+
+local colors = require("tokyonight.colors").setup()
+require("scrollbar").setup({
+   handle = {
+        color = colors.bg_highlight,
+    },
+    marks = {
+        Search = { color = colors.orange },
+        Error = { color = colors.error },
+        Warn = { color = colors.warning },
+        Info = { color = colors.info },
+        Hint = { color = colors.hint },
+        Misc = { color = colors.purple },
+    }
+})
 require('colorizer').setup()
 require('gitsigns').setup()
 require("toggleterm").setup({
