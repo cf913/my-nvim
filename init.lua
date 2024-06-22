@@ -111,6 +111,12 @@ require("lazy").setup({
         require("supermaven-nvim").setup({})
       end,
     },
+    {
+  "pmizio/typescript-tools.nvim",
+  lazy = true,
+  dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+  opts = {},
+}
 })
 
 vim.cmd[[colorscheme tokyonight]]

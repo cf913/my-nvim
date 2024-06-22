@@ -12,7 +12,7 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
   -- Replace the language servers listed here
   -- with the ones you want to install
-  ensure_installed = {'tsserver', 'emmet_language_server', 'emmet_ls', 'tailwindcss-language-server'},
+  ensure_installed = {'tsserver', 'emmet_language_server', 'emmet_ls', },
   handlers = {
     function(server_name)
       require('lspconfig')[server_name].setup({})
@@ -36,7 +36,8 @@ local cmp = require("cmp")
 		mapping = cmp.mapping.preset.insert({
 			["<C-b>"] = cmp.mapping.scroll_docs(-4),
 			["<C-f>"] = cmp.mapping.scroll_docs(4),
-			["<C-Space>"] = cmp.mapping.complete(),
+      -- Ctrl + space triggers completion menu
+      ['<C-Space>'] = cmp.mapping.complete(),
 			["<C-e>"] = cmp.mapping.abort(),
 			["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 			['<C-n>'] = cmp.mapping(function()
@@ -66,3 +67,8 @@ local cmp = require("cmp")
 			{ name = "cmdline" },
 		}),
 	})
+
+
+require("typescript-tools").setup({})
+vim.keymap.set("n", "<leader>i", ":TSToolsAddMissingImports<CR>", {})
+vim.keymap.set("n", "<leader>si", ":TSToolsOrganizeImports<CR>", {})
