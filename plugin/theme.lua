@@ -12,7 +12,8 @@
 --     },
 --
 --     styles = {
---         bold = true,
+--        
+--        bold = true,
 --         italic = false,
 --         transparency = true,
 --     },

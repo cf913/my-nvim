@@ -30,10 +30,14 @@ require("lazy").setup({
   priority = 1000,
   opts = {
     transparent = true,
+    style = 'night',
     styles = {
       sidebars = "transparent",
       floats = "transparent",
-    }
+    },
+    on_colors = function(colors)
+      colors.bg_statusline = colors.none -- To check if its working try something like "#ff00ff" instead of colors.none
+    end,
   },
 },
   { 'j-hui/fidget.nvim', opts = {}},
@@ -100,7 +104,9 @@ require("lazy").setup({
 
 vim.cmd[[colorscheme tokyonight]]
 
-require('lualine').setup()
+require('lualine').setup({
+  color = { bg = 'transparent'},
+})
 require('Comment').setup()
 
 local colors = require("tokyonight.colors").setup()
