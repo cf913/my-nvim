@@ -1,7 +1,7 @@
 require("cf913")
 
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
@@ -50,16 +50,16 @@ require("lazy").setup({
   { 'nvim-treesitter/nvim-treesitter'},
   { 'L3MON4D3/LuaSnip'},
   { "rose-pine/neovim", name = "rose-pine" },
-  { "nvim-tree/nvim-tree.lua",
-    version = "*",
-    lazy = false,
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-    },
-    config = function()
-      require("nvim-tree").setup {}
-    end
-  },
+  -- { "nvim-tree/nvim-tree.lua",
+  --   version = "*",
+  --   lazy = false,
+  --   dependencies = {
+  --     "nvim-tree/nvim-web-devicons",
+  --   },
+  --   config = function()
+  --     require("nvim-tree").setup {}
+  --   end
+  -- },
   {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
@@ -96,10 +96,10 @@ require("lazy").setup({
         -- add any options here
     }
   },
-  {
-    'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' }
-  },
+  -- {
+  --   'nvim-lualine/lualine.nvim',
+  --   dependencies = { 'nvim-tree/nvim-web-devicons' }
+  -- },
   {
     "luckasRanarison/tailwind-tools.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
@@ -112,11 +112,16 @@ require("lazy").setup({
       end,
     },
     {
-  "pmizio/typescript-tools.nvim",
-  lazy = true,
-  dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-  opts = {},
-}
+    "pmizio/typescript-tools.nvim",
+    lazy = true,
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {},
+  },
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" }
+  }
 })
 
 vim.cmd[[colorscheme tokyonight]]
@@ -125,9 +130,9 @@ require("tailwind-tools").setup({
   -- your configuration
 })
 
-require('lualine').setup({
-  color = { bg = 'transparent'},
-})
+-- require('lualine').setup({
+--   color = { bg = 'transparent'},
+-- })
 require('Comment').setup()
 
 local colors = require("tokyonight.colors").setup()
@@ -147,7 +152,7 @@ require("scrollbar").setup({
 require('colorizer').setup()
 require('gitsigns').setup()
 require("toggleterm").setup({
-  open_mapping = [[<c-J>]],
+  open_mapping = [[<c-`>]],
   direction = 'float'
 })
 

@@ -38,7 +38,7 @@ local cmp = require("cmp")
 			["<C-f>"] = cmp.mapping.scroll_docs(4),
       -- Ctrl + space triggers completion menu
       ['<C-Space>'] = cmp.mapping.complete(),
-			["<C-e>"] = cmp.mapping.abort(),
+			-- ["<C-e>"] = cmp.mapping.abort(),
 			["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 			['<C-n>'] = cmp.mapping(function()
       if cmp.visible() then
