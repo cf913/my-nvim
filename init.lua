@@ -104,7 +104,13 @@ require("lazy").setup({
     "luckasRanarison/tailwind-tools.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     opts = {} -- your configuration
-  }
+  },
+   {
+      "supermaven-inc/supermaven-nvim",
+      config = function()
+        require("supermaven-nvim").setup({})
+      end,
+    },
 })
 
 vim.cmd[[colorscheme tokyonight]]
