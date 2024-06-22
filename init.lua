@@ -99,10 +99,19 @@ require("lazy").setup({
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' }
+  },
+  {
+    "luckasRanarison/tailwind-tools.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    opts = {} -- your configuration
   }
 })
 
 vim.cmd[[colorscheme tokyonight]]
+
+require("tailwind-tools").setup({
+  -- your configuration
+})
 
 require('lualine').setup({
   color = { bg = 'transparent'},
