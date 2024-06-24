@@ -113,9 +113,9 @@ require("lazy").setup({
     },
     {
     "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig"},
     lazy = true,
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    opts = {},
+    
   },
   {
     "ThePrimeagen/harpoon",
@@ -156,6 +156,10 @@ require("toggleterm").setup({
   insert_mappings = false,
   direction = 'float'
 })
+
+vim.g.markdown_fenced_languages = {
+  "ts=typescript"
+}
 
 
 

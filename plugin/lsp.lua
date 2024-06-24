@@ -8,14 +8,37 @@ lsp_zero.on_attach(function(client, bufnr)
    lsp_zero.buffer_autoformat()
 end)
 
+local lspconfig = require('lspconfig')
+
 require('mason').setup({})
 require('mason-lspconfig').setup({
   -- Replace the language servers listed here
   -- with the ones you want to install
-  ensure_installed = {'tsserver', 'emmet_language_server', 'emmet_ls', },
+  ensure_installed = {'denols', 'tsserver', 'emmet_language_server', 'emmet_ls', },
   handlers = {
     function(server_name)
-      require('lspconfig')[server_name].setup({})
+      lspconfig[server_name].setup({})
+    end,
+    ['tsserver'] = function()
+      lspconfig['tsserver'].setup({
+        root_dir = lspconfig.util.root_pattern('package.json', 'tsconfig.json', '.git'),
+        single_file_support = false
+      })
+    end,
+    ['denols'] = function()
+      lspconfig['denols'].setup({
+        single_file_support = false,
+        root_dir = lspconfig.util.root_pattern("deno.json"),
+        on_attach = function()
+          local active_clients = vim.lsp.get_active_clients()
+          for _, client in pairs(active_clients) do
+            -- stop tsserver if denols is already active
+            if client.name == "tsserver" then
+              client.stop()
+            end
+          end
+        end,
+      })
     end,
   },
 })
@@ -69,6 +92,46 @@ local cmp = require("cmp")
 	})
 
 
-require("typescript-tools").setup({})
-vim.keymap.set("n", "<leader>i", ":TSToolsAddMissingImports<CR>", {})
-vim.keymap.set("n", "<leader>si", ":TSToolsOrganizeImports<CR>", {})
+-- require("typescript-tools").setup({
+--   single_file_support = false,
+--   root_dir = lspconfig.util.root_pattern('package.json', 'bu.js', 'tsconfig.json', '.git'),
+-- })
+-- vim.keymap.set("n", "<leader>i", ":TSToolsAddMissingImports<CR>", {})
+-- vim.keymap.set("n", "<leader>si", ":TSToolsOrganizeImports<CR>", {})
+-- 
+
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--   group = vim.api.nvim_create_augroup("ts_fix_imports", { clear = true }),
+--   desc = "Add missing imp worts and remove unused imports for TS",
+--   pattern = { "*.ts", "*.tsx" },
+--   callback = function()
+--     local params = vim.lsp.util.make_range_params()
+--     params.context = {
+--       only = { "source.addMissingImports.ts", "source.removeUnused.ts" },
+--     }
+--     local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+--     for _, res in pairs(result or {}) do
+--       for _, r in pairs(res.result or {}) do
+--         if r.kind == "source.addMissingImports.ts" then
+--           vim.lsp.buf.code_action({
+--             apply = true,
+--             context = {
+--               only = { "source.addMissingImports.ts" },
+--             },
+--           })
+--           vim.cmd("write")
+--         else
+--           if r.kind == "source.removeUnused.ts" then
+--             vim.lsp.buf.code_action({
+--               apply = true,
+--               context = {
+--                 only = { "source.removeUnused.ts" },
+--               },
+--             })
+--             vim.cmd("write")
+--           end
+--         end
+--       end
+--     end
+--   end,
+-- })
