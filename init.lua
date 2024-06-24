@@ -1,7 +1,7 @@
 require("cf913")
 
--- vim.g.loaded_netrw = 1
--- vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
@@ -50,16 +50,16 @@ require("lazy").setup({
   { 'nvim-treesitter/nvim-treesitter'},
   { 'L3MON4D3/LuaSnip'},
   { "rose-pine/neovim", name = "rose-pine" },
-  -- { "nvim-tree/nvim-tree.lua",
-  --   version = "*",
-  --   lazy = false,
-  --   dependencies = {
-  --     "nvim-tree/nvim-web-devicons",
-  --   },
-  --   config = function()
-  --     require("nvim-tree").setup {}
-  --   end
-  -- },
+  { "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("nvim-tree").setup {}
+    end
+  },
   {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
@@ -152,7 +152,8 @@ require("scrollbar").setup({
 require('colorizer').setup()
 require('gitsigns').setup()
 require("toggleterm").setup({
-  open_mapping = [[<c-`>]],
+  open_mapping = [[<leader>`]],
+  insert_mappings = false,
   direction = 'float'
 })
 
