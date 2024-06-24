@@ -40,7 +40,7 @@ require("lazy").setup({
     end,
   },
 },
-  { 'j-hui/fidget.nvim', opts = {}},
+  -- { 'j-hui/fidget.nvim', opts = {}},
   { 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
   { 'williamboman/mason.nvim'},
   { 'williamboman/mason-lspconfig.nvim'},
@@ -105,17 +105,11 @@ require("lazy").setup({
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     opts = {} -- your configuration
   },
-   {
-      "supermaven-inc/supermaven-nvim",
-      config = function()
-        require("supermaven-nvim").setup({})
-      end,
-    },
-    {
-    "pmizio/typescript-tools.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig"},
-    lazy = true,
-    
+  {
+    "supermaven-inc/supermaven-nvim",
+    config = function()
+      require("supermaven-nvim").setup({})
+    end,
   },
   {
     "ThePrimeagen/harpoon",
@@ -149,8 +143,11 @@ require("scrollbar").setup({
         Misc = { color = colors.purple },
     }
 })
+
 require('colorizer').setup()
+
 require('gitsigns').setup()
+
 require("toggleterm").setup({
   open_mapping = [[<leader>`]],
   insert_mappings = false,
