@@ -1,7 +1,6 @@
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.keymap.set("n", "<leader>w", vim.cmd.w)
-vim.keymap.set("n", "<leader>wq", vim.cmd.wq)
 vim.keymap.set("n", "<leader>q", vim.cmd.close)
 vim.keymap.set("n", "<leader>Q", vim.cmd.wqa)
 
@@ -52,5 +51,6 @@ local organize_imports = function()
   vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})
 end
 
-vim.keymap.set("n", "<leader>i", auto_import)
-vim.keymap.set("n", "<leader>o", organize_imports) 
+vim.keymap.set("n", "<leader>i", auto_import, {desc = "Auto import"})
+vim.keymap.set("n", "<leader>o", organize_imports, {desc = "Organize imports"})
+

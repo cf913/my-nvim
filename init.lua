@@ -18,46 +18,76 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
-vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
+vim.g.mapleader = " "       -- Make sure to set `mapleader` before lazy so your mappings are correct
 vim.g.maplocalleader = "\\" -- Same for `maplocalleader`
 
 require("lazy").setup({
-  { 'nvim-telescope/telescope.nvim', tag = '0.1.6',
+  {
+    'nvim-telescope/telescope.nvim',
+    tag = '0.1.6',
     dependencies = { 'nvim-lua/plenary.nvim' }
   },
-  { 'folke/tokyonight.nvim', 
- lazy = false,
-  priority = 1000,
-  opts = {
-    transparent = true,
-    style = 'night',
-    styles = {
-      sidebars = "transparent",
-      floats = "transparent",
+  {
+    'folke/tokyonight.nvim',
+    lazy = false,
+    priority = 1000,
+    opts = {
+      transparent = true,
+      style = 'night',
+      styles = {
+        sidebars = "transparent",
+        floats = "transparent",
+      },
+      on_colors = function(colors)
+        colors.bg_statusline = colors
+            .none -- To check if its working try something like "#ff00ff" instead of colors.none
+      end,
     },
-    on_colors = function(colors)
-      colors.bg_statusline = colors.none -- To check if its working try something like "#ff00ff" instead of colors.none
+  },
+  {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "luvit-meta/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+  { "Bilal2453/luvit-meta",             lazy = true }, -- optional `vim.uv` typings
+  -- { 'j-hui/fidget.nvim', opts = {}},
+  { 'VonHeikemen/lsp-zero.nvim',        branch = 'v3.x' },
+  { 'williamboman/mason.nvim' },
+  { 'williamboman/mason-lspconfig.nvim' },
+  { 'neovim/nvim-lspconfig' },
+  {
+    'hrsh7th/nvim-cmp',
+    opts = function(_, opts)
+      opts.sources = opts.sources or {}
+      table.insert(opts.sources, {
+        name = "lazydev",
+        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+      })
     end,
   },
-},
-  -- { 'j-hui/fidget.nvim', opts = {}},
-  { 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
-  { 'williamboman/mason.nvim'},
-  { 'williamboman/mason-lspconfig.nvim'},
-  { 'neovim/nvim-lspconfig'},
-  { 'hrsh7th/nvim-cmp'},
-  { 'hrsh7th/cmp-nvim-lsp'},
-  { 'nvim-treesitter/nvim-treesitter'},
-  { 'L3MON4D3/LuaSnip'},
-  { "rose-pine/neovim", name = "rose-pine" },
-  { "nvim-tree/nvim-tree.lua",
+  { 'hrsh7th/cmp-nvim-lsp' },
+  { 'nvim-treesitter/nvim-treesitter' },
+  { 'L3MON4D3/LuaSnip' },
+  { "rose-pine/neovim",               name = "rose-pine" },
+  {
+    "nvim-tree/nvim-tree.lua",
     version = "*",
     lazy = false,
     dependencies = {
       "nvim-tree/nvim-web-devicons",
     },
     config = function()
-      require("nvim-tree").setup {}
+      require("nvim-tree").setup {
+        update_focused_file = {
+          enable = true,
+        }
+      }
     end
   },
   {
@@ -67,14 +97,15 @@ require("lazy").setup({
     -- use opts = {} for passing setup options
     -- this is equalent to setup({}) function
   },
-  {'prettier/vim-prettier'},
-  { "karb94/neoscroll.nvim",
-    config = function ()
+  { 'prettier/vim-prettier' },
+  {
+    "karb94/neoscroll.nvim",
+    config = function()
       require('neoscroll').setup({})
     end
   },
-  {'petertriho/nvim-scrollbar'},
-  {'norcalli/nvim-colorizer.lua'},
+  { 'petertriho/nvim-scrollbar' },
+  { 'norcalli/nvim-colorizer.lua' },
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
@@ -88,12 +119,12 @@ require("lazy").setup({
       -- refer to the configuration section below
     }
   },
-  {'lewis6991/gitsigns.nvim'},
-  {'akinsho/toggleterm.nvim', version = "*", config = true},
+  { 'lewis6991/gitsigns.nvim' },
+  { 'akinsho/toggleterm.nvim', version = "*", config = true },
   {
     'numToStr/Comment.nvim',
     opts = {
-        -- add any options here
+      -- add any options here
     }
   },
   -- {
@@ -118,7 +149,7 @@ require("lazy").setup({
   }
 })
 
-vim.cmd[[colorscheme tokyonight]]
+vim.cmd [[colorscheme tokyonight]]
 
 require("tailwind-tools").setup({
   -- your configuration
@@ -131,17 +162,17 @@ require('Comment').setup()
 
 local colors = require("tokyonight.colors").setup()
 require("scrollbar").setup({
-   handle = {
-        color = colors.bg_highlight,
-    },
-    marks = {
-        Search = { color = colors.orange },
-        Error = { color = colors.error },
-        Warn = { color = colors.warning },
-        Info = { color = colors.info },
-        Hint = { color = colors.hint },
-        Misc = { color = colors.purple },
-    }
+  handle = {
+    color = colors.bg_highlight,
+  },
+  marks = {
+    Search = { color = colors.orange },
+    Error = { color = colors.error },
+    Warn = { color = colors.warning },
+    Info = { color = colors.info },
+    Hint = { color = colors.hint },
+    Misc = { color = colors.purple },
+  }
 })
 
 require('colorizer').setup()
@@ -157,9 +188,3 @@ require("toggleterm").setup({
 vim.g.markdown_fenced_languages = {
   "ts=typescript"
 }
-
-
-
-
-
-
