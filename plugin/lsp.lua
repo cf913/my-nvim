@@ -10,44 +10,47 @@ end)
 
 local lspconfig = require('lspconfig')
 
-
-local restart_tsserver = function()
-  vim.lsp.start({
-    name = 'tsserver',
-    cmd = { 'typescript-language-server', '--stdio' },
-    root_dir = vim.fs.root(0, { 'package.json', 'tsconfig.json', '.git' }),
-    autostart = true
-  })
+local check_if_server_is_active = function(name, bufnr)
+  local active_clients = vim.lsp.get_clients()
+  local is_active = false
+  for _, client in pairs(active_clients) do
+    if client.name == name then
+      is_active = vim.lsp.buf_is_attached(bufnr, client.id)
+    end
+  end
+  return is_active
 end
 
-local stop_tsserver = function(_, bufnr)
+local get_client_by_name = function(name)
   local active_clients = vim.lsp.get_clients()
   for _, client in pairs(active_clients) do
-    -- stop tsserver if denols is already active
-    if client.name == "tsserver" then
-      vim.lsp.buf_detach_client(bufnr, client.id)
+    if client.name == name then
+      return client
     end
   end
 end
 
-local checkifdenolsactive = function(_, bufnr)
-  -- check if denols is already active
-  -- if it is, detach tsserver from buffer
-  -- if not, do nothing
-  -- this is to prevent tsserver from starting when denols is already active
-  local active_clients = vim.lsp.get_clients()
-  local denols_active = false
-  for _, client in pairs(active_clients) do
-    if client.name == "denols" then
-      denols_active = vim.lsp.buf_is_attached(bufnr, client.id)
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client.name == "tsserver"
+    then
+      local is_denols_active = check_if_server_is_active("denols", bufnr)
+      if is_denols_active then
+        vim.lsp.buf_detach_client(bufnr, args.data.client_id)
+      end
+    elseif client.name == "denols"
+    then
+      local is_tsserver_active = check_if_server_is_active("tsserver", bufnr)
+      if is_tsserver_active then
+        local active_client = get_client_by_name("tsserver")
+        vim.lsp.buf_detach_client(bufnr, active_client.id)
+      end
     end
-  end
-  for _, client in pairs(active_clients) do
-    if client.name == "tsserver" and denols_active then
-      vim.lsp.buf_detach_client(bufnr, client.id)
-    end
-  end
-end
+    print('end from attach')
+  end,
+})
 
 
 require('mason').setup({})
@@ -62,44 +65,16 @@ require('mason-lspconfig').setup({
     ['tsserver'] = function()
       lspconfig['tsserver'].setup({
         root_dir = lspconfig.util.root_pattern('package.json', 'tsconfig.json', '.git'),
-        single_file_support = false,
-        on_attach = checkifdenolsactive,
       })
     end,
     ['denols'] = function()
       lspconfig['denols'].setup({
         root_dir = lspconfig.util.root_pattern("deno.json"),
-        on_attach = stop_tsserver,
       })
     end,
   },
 })
 
-local restart_denols = function()
-  vim.lsp.start({
-    name = 'denols',
-    cmd = { 'deno', 'lsp' },
-    root_dir = vim.fs.root(0, { 'deno.json' }),
-    autostart = true
-  })
-end
-
-local stop_denols = function()
-  local active_clients = vim.lsp.get_clients()
-  for _, client in pairs(active_clients) do
-    -- stop tsserver if denols is already active
-    if client.name == "denols" then
-      client.stop()
-    end
-  end
-end
-
-
-vim.keymap.set("n", "<leader>rd", restart_denols, { desc = "Restart LSP denols" })
-vim.keymap.set("n", "<leader>sd", stop_denols, { desc = "Stop LSP denols" })
-
-vim.keymap.set("n", "<leader>rt", restart_tsserver, { desc = "Restart LSP tsserver" })
-vim.keymap.set("n", "<leader>st", stop_tsserver, { desc = "Stop LSP tsserver" })
 local cmp = require("cmp")
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
