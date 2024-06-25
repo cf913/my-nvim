@@ -12,22 +12,12 @@ local lspconfig = require('lspconfig')
 
 local check_if_server_is_active = function(name, bufnr)
   local active_clients = vim.lsp.get_clients()
-  local is_active = false
   for _, client in pairs(active_clients) do
     if client.name == name then
-      is_active = vim.lsp.buf_is_attached(bufnr, client.id)
+      return vim.lsp.buf_is_attached(bufnr, client.id), client
     end
   end
-  return is_active
-end
-
-local get_client_by_name = function(name)
-  local active_clients = vim.lsp.get_clients()
-  for _, client in pairs(active_clients) do
-    if client.name == name then
-      return client
-    end
-  end
+  return false
 end
 
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -42,13 +32,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
       end
     elseif client.name == "denols"
     then
-      local is_tsserver_active = check_if_server_is_active("tsserver", bufnr)
+      local is_tsserver_active, active_client = check_if_server_is_active("tsserver", bufnr)
       if is_tsserver_active then
-        local active_client = get_client_by_name("tsserver")
         vim.lsp.buf_detach_client(bufnr, active_client.id)
       end
     end
-    print('end from attach')
   end,
 })
 
@@ -65,11 +53,23 @@ require('mason-lspconfig').setup({
     ['tsserver'] = function()
       lspconfig['tsserver'].setup({
         root_dir = lspconfig.util.root_pattern('package.json', 'tsconfig.json', '.git'),
+        on_attach = function(client, bufnr)
+          local is_denols_active = check_if_server_is_active("denols", bufnr)
+          if is_denols_active then
+            vim.lsp.buf_detach_client(bufnr, client.id)
+          end
+        end
       })
     end,
     ['denols'] = function()
       lspconfig['denols'].setup({
         root_dir = lspconfig.util.root_pattern("deno.json"),
+        on_attach = function(_, bufnr)
+          local is_tsserver_active, active_client = check_if_server_is_active("tsserver", bufnr)
+          if is_tsserver_active then
+            vim.lsp.buf_detach_client(bufnr, active_client.id)
+          end
+        end
       })
     end,
   },
