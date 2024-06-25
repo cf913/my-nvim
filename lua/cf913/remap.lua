@@ -4,6 +4,10 @@ vim.keymap.set("n", "<leader>w", vim.cmd.w)
 vim.keymap.set("n", "<leader>q", vim.cmd.close)
 vim.keymap.set("n", "<leader>Q", vim.cmd.wqa)
 
+-- keymap to copy the current selection to the system clipboard_tool
+vim.keymap.set({ "n", "v" }, "<leader>C", "\"*y")
+vim.keymap.set({ "n", "v" }, "<leader>V", "\"*p")
+
 vim.keymap.set("n", "-", ":split<CR>")
 vim.keymap.set("n", "|", ":vsplit<CR>")
 
@@ -11,23 +15,23 @@ vim.keymap.set("n", "<leader>d", ":lua vim.diagnostic.open_float(nil, {scope=\"c
 
 
 local auto_import = function()
-    local params = vim.lsp.util.make_range_params()
-    params.context = {
-      only = { "source.addMissingImports.ts" },
-    }
-    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
-    for _, res in pairs(result or {}) do
-      for _, r in pairs(res.result or {}) do
-        if r.kind == "source.addMissingImports.ts" then
-          vim.lsp.buf.code_action({
-            apply = true,
-            context = {
-              only = { "source.addMissingImports.ts" },
-            },
-          })
-        end
+  local params = vim.lsp.util.make_range_params()
+  params.context = {
+    only = { "source.addMissingImports.ts" },
+  }
+  local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+  for _, res in pairs(result or {}) do
+    for _, r in pairs(res.result or {}) do
+      if r.kind == "source.addMissingImports.ts" then
+        vim.lsp.buf.code_action({
+          apply = true,
+          context = {
+            only = { "source.addMissingImports.ts" },
+          },
+        })
       end
     end
+  end
 end
 
 local organize_imports = function()
@@ -48,9 +52,8 @@ local organize_imports = function()
       end
     end
   end
-  vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})
+  vim.lsp.buf.execute_command({ command = "_typescript.organizeImports", arguments = { vim.fn.expand("%:p") } })
 end
 
-vim.keymap.set("n", "<leader>i", auto_import, {desc = "Auto import"})
-vim.keymap.set("n", "<leader>o", organize_imports, {desc = "Organize imports"})
-
+vim.keymap.set("n", "<leader>i", auto_import, { desc = "Auto import" })
+vim.keymap.set("n", "<leader>o", organize_imports, { desc = "Organize imports" })
