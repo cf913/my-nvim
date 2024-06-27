@@ -86,7 +86,10 @@ require("lazy").setup({
       require("nvim-tree").setup {
         update_focused_file = {
           enable = true,
-        }
+        },
+        filters = {
+          dotfiles = true,
+        },
       }
     end
   },
@@ -99,10 +102,7 @@ require("lazy").setup({
   },
   { 'prettier/vim-prettier' },
   {
-    "karb94/neoscroll.nvim",
-    config = function()
-      require('neoscroll').setup({})
-    end
+    "karb94/neoscroll.nvim"
   },
   { 'petertriho/nvim-scrollbar' },
   { 'norcalli/nvim-colorizer.lua' },
@@ -146,44 +146,35 @@ require("lazy").setup({
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
     dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" }
-  }
-})
-
-vim.cmd [[colorscheme tokyonight]]
-
-require("tailwind-tools").setup({
-  -- your configuration
-})
-
--- require('lualine').setup({
---   color = { bg = 'transparent'},
--- })
-require('Comment').setup()
-
-local colors = require("tokyonight.colors").setup()
-require("scrollbar").setup({
-  handle = {
-    color = colors.bg_highlight,
   },
-  marks = {
-    Search = { color = colors.orange },
-    Error = { color = colors.error },
-    Warn = { color = colors.warning },
-    Info = { color = colors.info },
-    Hint = { color = colors.hint },
-    Misc = { color = colors.purple },
+  {
+    "kdheepak/lazygit.nvim",
+    cmd = {
+      "LazyGit",
+      "LazyGitConfig",
+      "LazyGitCurrentFile",
+      "LazyGitFilter",
+      "LazyGitFilterCurrentFile",
+    },
+    -- optional for floating window border decoration
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    -- setting the keybinding for LazyGit with 'keys' is recommended in
+    -- order to load the plugin when the command is run for the first time
+    keys = {
+      { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" }
+    }
   }
 })
+
+
+
 
 require('colorizer').setup()
 
 require('gitsigns').setup()
 
-require("toggleterm").setup({
-  open_mapping = [[<leader>`]],
-  insert_mappings = false,
-  direction = 'float'
-})
 
 vim.g.markdown_fenced_languages = {
   "ts=typescript"

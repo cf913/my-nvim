@@ -1,6 +1,6 @@
 -- Set colorscheme
 vim.opt.termguicolors = true
-vim.cmd.colorscheme('tokyonight')
+-- vim.cmd.colorscheme('tokyonight')
 
 -- disable netrw at the very start of your init.lua
 
@@ -23,4 +23,3 @@ vim.cmd.colorscheme('tokyonight')
 --   -- },
 -- })
 --
-
