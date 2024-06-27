@@ -1,4 +1,8 @@
 vim.g.mapleader = " "
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.inccommand = "split"
+
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.keymap.set("n", "<leader>w", vim.cmd.w)
 vim.keymap.set("n", "<leader>q", vim.cmd.close)
@@ -10,6 +14,8 @@ vim.keymap.set({ "n", "v" }, "<leader>V", "\"*p")
 
 vim.keymap.set("n", "-", ":split<CR>")
 vim.keymap.set("n", "|", ":vsplit<CR>")
+
+vim.keymap.set("n", "<leader>S", ":set ic!<CR>", { desc = "Toggle Search SmartCase" })
 
 vim.keymap.set("n", "<leader>d", ":lua vim.diagnostic.open_float(nil, {scope=\"cursor\"})<CR>")
 
