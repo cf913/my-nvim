@@ -4,10 +4,11 @@ vim.opt.smartcase = true
 vim.opt.inccommand = "split"
 vim.opt.mouse = ""
 
+-- save this
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.keymap.set("n", "<leader>w", vim.cmd.w)
 vim.keymap.set("n", "<leader>q", vim.cmd.close)
-vim.keymap.set("n", "<leader>Q", vim.cmd.wqa)
+vim.keymap.set("n", "<leader>Q", ":wa<CR>:qa<CR>", { desc = "Save and quit" })
 
 -- keymap to copy the current selection to the system clipboard_tool
 vim.keymap.set({ "n", "v" }, "<leader>C", "\"*y")
